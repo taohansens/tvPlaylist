@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api from '../api';
-import ChannelList from './ChannelList';
+import ChannelTable from './ChannelTable';
 import {
     CountryListContainer,
     CountryCard,
@@ -32,7 +32,7 @@ function CountryList() {
                     <CountryFlag src={country.flagUrl} alt={`Bandeira de ${country.name}`} />
                     <CountryName>{country.name}</CountryName>
                     <CountryCode>{country.isoCode}</CountryCode>
-                    <ChannelList countryId={country.id} />
+                    <ChannelTable countryId={country.id} />
                 </CountryCard>
             ))}
         </CountryListContainer>

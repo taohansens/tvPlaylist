@@ -1,13 +1,13 @@
 import React from 'react';
 import CountryList from '../components/CountryList';
-import {Link} from "react-router-dom";
+import Header from "../components/Header";
+import ChannelTable from "../components/ChannelTable";
 
 function Home() {
     return (
         <div>
-            <h1>Bem-vindo ao playlistTV</h1>
-            <Link to={'/create'}>Criar Canal</Link>
-            <CountryList />
+            <Header />
+            <ChannelTable />
         </div>
     );
 }

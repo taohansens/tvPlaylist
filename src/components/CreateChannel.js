@@ -1,68 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import api from '../api';
 import { useParams } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const CreateChannelContainer = styled.div`
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-`;
-
-const CreateChannelTitle = styled.h2`
-  margin-bottom: 20px;
-  color: #333;
-`;
-
-const CreateChannelForm = styled.form`
-  margin-top: 20px;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 20px;
-`;
-
-const Label = styled.label`
-  font-weight: bold;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ced4da;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ced4da;
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
 function CreateChannel() {
     const [formData, setFormData] = useState({
         name: '',
         url: '',
         status: 'ACTIVE',
         tvgId: '',
-        category: '',
+        categoryId: '',
         tvgLogo: '',
         countryId: '',
         languageId: '',
@@ -70,10 +17,12 @@ function CreateChannel() {
 
     const [countries, setCountries] = useState([]);
     const [languages, setLanguages] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         fetchCountries();
         fetchLanguages();
+        fetchCategories();
     }, []);
 
     const fetchCountries = async () => {
@@ -82,6 +31,15 @@ function CreateChannel() {
             setCountries(response.data);
         } catch (error) {
             console.error('Erro ao buscar países:', error);
+        }
+    };
+
+    const fetchCategories = async () => {
+        try {
+            const response = await api.get('/category');
+            setCategories(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar categorias:', error);
         }
     };
 
@@ -102,7 +60,7 @@ function CreateChannel() {
         e.preventDefault();
         try {
             console.log(formData)
-            await api.post(`/channels?countryId=${formData.countryId}&languageId=${formData.languageId}`, formData);
+            await api.post(`/channels?countryId=${formData.countryId}&languageId=${formData.languageId}&categoryId=${formData.categoryId}`, formData);
             console.log('Canal criado com sucesso!');
         } catch (error) {
             console.error('Erro ao criar canal:', error);
@@ -110,13 +68,12 @@ function CreateChannel() {
     };
 
     return (
-        <CreateChannelContainer>
-            <h2>Criar Novo Canal</h2>
-            <form onSubmit={handleSubmit} className={FormGroup}>
-                <div>
+        <div className="container p-5">
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
                     <label htmlFor="name">Nome:</label>
                     <input
-                        className={Input}
+                        className="form-control"
                         type="text"
                         id="name"
                         name="name"
@@ -124,19 +81,32 @@ function CreateChannel() {
                         onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="url">URL:</label>
                     <input
-                        type="text"
+                        className="form-control"
+                        type="url"
                         id="url"
                         name="url"
                         value={formData.url}
                         onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className="form-group">
+                    <label htmlFor="tvgLogo">TVG Logo:</label>
+                    <input
+                        className="form-control"
+                        type="url"
+                        id="tvgLogo"
+                        name="tvgLogo"
+                        value={formData.tvgLogo}
+                        onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group">
                     <label htmlFor="tvgId">TVG ID:</label>
                     <input
+                        className="form-control"
                         type="text"
                         id="tvgId"
                         name="tvgId"
@@ -144,33 +114,29 @@ function CreateChannel() {
                         onChange={handleChange}
                     />
                 </div>
-                <div>
-                    <label htmlFor="category">Categoria:</label>
-                    <input
-                        type="text"
-                        id="category"
-                        name="category"
-                        value={formData.category}
-                        onChange={handleChange}
-                    />
+                <div className="form-group">
+                    <label htmlFor="categoryId">Categoria:</label>
+                    <select className="form-control"
+                            id="categoryId"
+                            name="categoryId"
+                            value={formData.category}
+                            onChange={handleChange}
+                    >
+                        <option value="">Selecione uma categoria</option>
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <div>
-                    <label htmlFor="tvgLogo">TVG Logo:</label>
-                    <input
-                        type="text"
-                        id="tvgLogo"
-                        name="tvgLogo"
-                        value={formData.tvgLogo}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="countryId">País:</label>
-                    <select className={Select}
-                        id="countryId"
-                        name="countryId"
-                        value={formData.countryId}
-                        onChange={handleChange}
+                    <select className="form-control"
+                            id="countryId"
+                            name="countryId"
+                            value={formData.countryId}
+                            onChange={handleChange}
                     >
                         <option value="">Selecione um país</option>
                         {countries.map((country) => (
@@ -180,13 +146,13 @@ function CreateChannel() {
                         ))}
                     </select>
                 </div>
-                <div>
+                <div className="form-group">
                     <label htmlFor="languageId">Idioma:</label>
-                    <select
-                        id="languageId"
-                        name="languageId"
-                        value={formData.languageId}
-                        onChange={handleChange}
+                    <select className="form-control"
+                            id="languageId"
+                            name="languageId"
+                            value={formData.languageId}
+                            onChange={handleChange}
                     >
                         <option value="">Selecione um idioma</option>
                         {languages.map((language) => (
@@ -196,9 +162,9 @@ function CreateChannel() {
                         ))}
                     </select>
                 </div>
-                <button type="submit">Criar Canal</button>
+                <button type="submit" className="btn btn-primary mt-4">Criar Canal</button>
             </form>
-        </CreateChannelContainer>
+        </div>
     );
 }
 

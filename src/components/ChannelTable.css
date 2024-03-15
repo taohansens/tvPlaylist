@@ -1,0 +1,15 @@
+.channel-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.channel-table th,
+.channel-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.channel-table th {
+    background-color: #f2f2f2;
+}

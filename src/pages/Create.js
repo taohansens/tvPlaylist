@@ -1,13 +1,13 @@
 import React from 'react';
 import CreateChannel from "../components/CreateChannel";
 import {Link} from "react-router-dom";
+import Header from "../components/Header";
 
 
 function Create() {
     return (
         <div>
-            <h1>Criar Canal</h1>
-            <Link to={'/home'}>Home</Link>
+            <Header />
             <CreateChannel />
         </div>
     );
