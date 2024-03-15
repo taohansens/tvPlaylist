@@ -37,7 +37,7 @@ function ChannelTable() {
                     <td><img src={channel.country.flagUrl} alt={`Logo do canal ${channel.name}`} width="20" height="15" /> {channel.country.name}
                     </td>
                     <td>{channel.status}</td>
-                    <td>{channel.category}</td>
+                    <td>{channel.category.name}</td>
                 </tr>
             ))}
             </tbody>
